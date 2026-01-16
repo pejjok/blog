@@ -3,6 +3,7 @@ package com.pejjok.blog.domain.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -20,6 +21,9 @@ public class TagEntity {
 
     @Column(nullable = false,unique = true)
     private String name;
+
+    @ManyToMany(mappedBy = "tags")
+    private List<PostEntity> posts;
 
     @Override
     public boolean equals(Object o) {
