@@ -51,10 +51,10 @@ public class PostEntity {
     )
     private Set<TagEntity> tags;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "timestamp(9)")// timestamp(9) is same precision for LocalDateTime
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "timestamp(9)")// timestamp(9) is same precision for LocalDateTime
     private LocalDateTime updatedAt;
 
     @Override

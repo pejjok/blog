@@ -33,7 +33,7 @@ public class UserEntity {
     @OneToMany(mappedBy = "author",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<PostEntity> posts = new ArrayList<>();
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "timestamp(9)") // timestamp(9) is same precision for LocalDateTime
     private LocalDateTime createdAt;
 
     @Override
