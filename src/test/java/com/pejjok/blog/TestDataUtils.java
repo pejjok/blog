@@ -1,5 +1,6 @@
 package com.pejjok.blog;
 
+import com.pejjok.blog.domain.entities.CategoryEntity;
 import com.pejjok.blog.domain.entities.UserEntity;
 
 import java.util.UUID;
@@ -27,6 +28,23 @@ public class TestDataUtils {
                 .name("userC")
                 .email("emailC@gmail.com")
                 .password("password")
+                .build();
+    }
+
+
+    public static CategoryEntity createTestCategoryEntityA(){
+        return CategoryEntity.builder()
+                .name("CategoryA")
+                .build();
+    }
+    public static CategoryEntity createTestCategoryEntityB(){
+        return CategoryEntity.builder()
+                .name("CategoryB")
+                .build();
+    }
+    public static CategoryEntity createTestCategoryEntityC(){
+        return CategoryEntity.builder()
+                .name("CategoryC")
                 .build();
     }
 }
