@@ -72,14 +72,14 @@ public class TagRepositoryTests{
 
     @Test
     public void testThatTagCanBeDeleted(){
-        // Create Category
+        // Create Tag
         TagEntity tagEntityA = TestDataUtils.createTestTagEntityA();
         underTest.save(tagEntityA);
 
-        // Delete Category
+        // Delete Tag
         underTest.deleteById(tagEntityA.getId());
 
-        // Find deleted Category
+        // Find deleted Tag
         Optional<TagEntity> result = underTest.findById(tagEntityA.getId());
 
         assertThat(result).isNotPresent();
