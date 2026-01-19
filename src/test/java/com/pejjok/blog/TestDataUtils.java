@@ -1,6 +1,7 @@
 package com.pejjok.blog;
 
 import com.pejjok.blog.domain.entities.CategoryEntity;
+import com.pejjok.blog.domain.entities.TagEntity;
 import com.pejjok.blog.domain.entities.UserEntity;
 
 import java.util.UUID;
@@ -45,6 +46,23 @@ public class TestDataUtils {
     public static CategoryEntity createTestCategoryEntityC(){
         return CategoryEntity.builder()
                 .name("CategoryC")
+                .build();
+    }
+
+
+    public static TagEntity createTestTagEntityA(){
+        return TagEntity.builder()
+                .name("TagA")
+                .build();
+    }
+    public static TagEntity createTestTagEntityB(){
+        return TagEntity.builder()
+                .name("TagB")
+                .build();
+    }
+    public static TagEntity createTestTagEntityC(){
+        return TagEntity.builder()
+                .name("TagC")
                 .build();
     }
 }
