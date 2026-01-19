@@ -4,6 +4,7 @@ package com.pejjok.blog.domain.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -21,6 +22,9 @@ public class CategoryEntity {
 
     @Column(nullable = false,unique = true)
     private String name;
+
+    @OneToMany(mappedBy = "category")
+    private List<PostEntity> posts;
 
     @Override
     public boolean equals(Object o) {
