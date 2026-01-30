@@ -6,8 +6,6 @@ import com.pejjok.blog.domain.entities.PostEntity;
 import com.pejjok.blog.domain.entities.TagEntity;
 import com.pejjok.blog.domain.entities.UserEntity;
 
-import java.util.UUID;
-
 public class TestDataUtils {
 
     public static UserEntity createTestUserEntityA(){
@@ -75,7 +73,7 @@ public class TestDataUtils {
                 .title("titleA")
                 .content("contentA")
                 .readingTime(3)
-                .status(PostStatus.PUBLISH)
+                .status(PostStatus.PUBLISHED)
                 .build();
     }
     public static PostEntity createTestPostEntityB(UserEntity user,CategoryEntity category){
@@ -85,7 +83,7 @@ public class TestDataUtils {
                 .title("titleB")
                 .content("contentB")
                 .readingTime(4)
-                .status(PostStatus.PUBLISH)
+                .status(PostStatus.PUBLISHED)
                 .build();
     }
     public static PostEntity createTestPostEntityC(UserEntity user,CategoryEntity category){
@@ -95,7 +93,7 @@ public class TestDataUtils {
                 .title("titleC")
                 .content("contentC")
                 .readingTime(5)
-                .status(PostStatus.PUBLISH)
+                .status(PostStatus.PUBLISHED)
                 .build();
     }
 }
