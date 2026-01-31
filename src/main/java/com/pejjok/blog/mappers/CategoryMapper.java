@@ -2,6 +2,7 @@ package com.pejjok.blog.mappers;
 
 import com.pejjok.blog.domain.PostStatus;
 import com.pejjok.blog.domain.dtos.CategoryDto;
+import com.pejjok.blog.domain.dtos.CreateCategoryRequest;
 import com.pejjok.blog.domain.entities.CategoryEntity;
 import com.pejjok.blog.domain.entities.PostEntity;
 import org.mapstruct.Mapper;
@@ -15,6 +16,8 @@ import java.util.List;
 public interface CategoryMapper {
     @Mapping(target = "postCount",source = "posts",qualifiedByName = "calculatePostCount")
     CategoryDto toDto(CategoryEntity categoryEntity);
+
+    CategoryEntity toEntity(CreateCategoryRequest categoryRequest);
 
     @Named("calculatePostCount")
     default Long calculatePostCount(List<PostEntity> posts){
