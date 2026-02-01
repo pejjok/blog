@@ -1,12 +1,15 @@
 package com.pejjok.blog.controlers;
 
 import com.pejjok.blog.domain.dtos.CategoryDto;
+import com.pejjok.blog.domain.dtos.CreateCategoryRequest;
+import com.pejjok.blog.domain.entities.CategoryEntity;
 import com.pejjok.blog.mappers.CategoryMapper;
 import com.pejjok.blog.services.CategoryService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,4 +31,11 @@ public class CategoryController {
         return ResponseEntity.ok(categoriesDto);
     }
 
+    @PostMapping
+    public ResponseEntity<CategoryDto> createCategory(
+            @Valid @RequestBody CreateCategoryRequest categoryRequest){
+        CategoryEntity categoryToCreate = categoryMapper.toEntity(categoryRequest);
+        CategoryEntity savedCategory = categoryService.createCategory(categoryToCreate);
+        return new ResponseEntity<>(categoryMapper.toDto(savedCategory), HttpStatus.CREATED);
+    }
 }

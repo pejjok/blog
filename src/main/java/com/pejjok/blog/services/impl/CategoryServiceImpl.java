@@ -3,6 +3,7 @@ package com.pejjok.blog.services.impl;
 import com.pejjok.blog.domain.entities.CategoryEntity;
 import com.pejjok.blog.repositories.CategoryRepository;
 import com.pejjok.blog.services.CategoryService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,5 +23,15 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryEntity> listOfCategories() {
         //Uses JOIN FETCH to prevent N+1 Problem when counting post
         return categoryRepository.findAllWithPosts();
+    }
+
+    @Override
+    @Transactional
+    public CategoryEntity createCategory(CategoryEntity categoryEntity) {
+        String categoryName = categoryEntity.getName();
+        if(categoryRepository.existsByNameIgnoreCase(categoryName)){
+            throw new IllegalArgumentException("Category already exist with name "+ categoryName);
+        }
+        return categoryRepository.save(categoryEntity);
     }
 }
