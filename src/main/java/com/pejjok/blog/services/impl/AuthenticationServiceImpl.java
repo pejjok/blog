@@ -1,6 +1,7 @@
 package com.pejjok.blog.services.impl;
 
 import com.pejjok.blog.services.AuthenticationService;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -49,6 +50,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .expiration(new Date(System.currentTimeMillis()+jwtExpiryMs))
                 .signWith(getSigningKey())
                 .compact();
+    }
+
+    @Override
+    public UserDetails validateToken(String token) {
+        String username = extractUsername(token);
+        return userDetailsService.loadUserByUsername(username);
+    }
+
+    private String extractUsername(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return claims.getSubject();
     }
 
     private SecretKey getSigningKey() {
