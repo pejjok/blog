@@ -3,6 +3,8 @@ package com.pejjok.blog.services.impl;
 import com.pejjok.blog.services.AuthenticationService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
@@ -27,7 +30,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         this.userDetailsService = userDetailsService;
     }
 
-    @Value("jwt.secret")
+    @Value("${jwt.secret}")
     private String secretKey;
 
     private Long jwtExpiryMs = 8640000L;// 24 hours
