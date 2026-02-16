@@ -19,7 +19,7 @@ public class AuthController {
         this.authenticationService = authenticationService;
     }
 
-    @PostMapping
+    @PostMapping("/login")
     public ResponseEntity<AuthResponse> authentication(@RequestBody LoginRequest loginRequest){
         UserDetails userDetails = authenticationService.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
         AuthResponse authResponse = AuthResponse.builder()
