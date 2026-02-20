@@ -6,9 +6,7 @@ import com.pejjok.blog.services.TagService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,5 +44,17 @@ public class TagServiceImpl implements TagService {
         savedTags.addAll(existingTags);
 
         return savedTags;
+    }
+
+    @Override
+    @Transactional
+    public void deleteTag(UUID id) {
+        Optional<TagEntity> tag = tagRepository.findById(id);
+        if (tag.isPresent()){
+            if (!tag.get().getPosts().isEmpty()) {
+                throw new IllegalStateException("Tag has post associated with it");
+            }
+            tagRepository.deleteById(id);
+        }
     }
 }

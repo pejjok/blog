@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/tags")
@@ -38,5 +39,11 @@ public class TagController {
                 .map(tagMapper::toTagResponse)
                 .toList();
         return ResponseEntity.status(HttpStatus.CREATED).body(listOfTags);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTag(@PathVariable UUID id){
+        tagService.deleteTag(id);
+        return ResponseEntity.noContent().build();
     }
 }
