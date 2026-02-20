@@ -38,6 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public void deleteCategory(UUID id) {
         Optional<CategoryEntity> category = categoryRepository.findById(id);
         if (category.isPresent()){
