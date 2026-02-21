@@ -1,7 +1,7 @@
 package com.pejjok.blog.mappers;
 
 import com.pejjok.blog.domain.PostStatus;
-import com.pejjok.blog.domain.dtos.TagResponse;
+import com.pejjok.blog.domain.dtos.TagDto;
 import com.pejjok.blog.domain.entities.PostEntity;
 import com.pejjok.blog.domain.entities.TagEntity;
 import org.mapstruct.Mapper;
@@ -14,7 +14,7 @@ import java.util.List;
 @Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface TagMapper {
     @Mapping(target = "postCount", source = "posts", qualifiedByName = "calculatePostCount")
-    TagResponse toTagResponse(TagEntity tagEntity);
+    TagDto toTagDto(TagEntity tagEntity);
 
     @Named("calculatePostCount")
     default Long calculatePostCount(List<PostEntity> posts){

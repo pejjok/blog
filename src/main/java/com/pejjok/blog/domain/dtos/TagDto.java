@@ -9,7 +9,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TagResponse {
+public class TagDto {
     private UUID id;
     private String name;
     private Long postCount;

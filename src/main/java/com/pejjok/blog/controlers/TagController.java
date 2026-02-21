@@ -1,7 +1,7 @@
 package com.pejjok.blog.controlers;
 
 import com.pejjok.blog.domain.dtos.CreateTagsRequest;
-import com.pejjok.blog.domain.dtos.TagResponse;
+import com.pejjok.blog.domain.dtos.TagDto;
 import com.pejjok.blog.domain.entities.TagEntity;
 import com.pejjok.blog.mappers.TagMapper;
 import com.pejjok.blog.services.TagService;
@@ -25,18 +25,18 @@ public class TagController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TagResponse>> getTags(){
-        List<TagResponse> listOfTags = tagService.listOfTags().stream()
-                .map(tagMapper::toTagResponse)
+    public ResponseEntity<List<TagDto>> getTags(){
+        List<TagDto> listOfTags = tagService.listOfTags().stream()
+                .map(tagMapper::toTagDto)
                 .toList();
         return ResponseEntity.ok(listOfTags);
     }
 
     @PostMapping
-    public ResponseEntity<List<TagResponse>> createTags(@RequestBody CreateTagsRequest createTagsRequest){
+    public ResponseEntity<List<TagDto>> createTags(@RequestBody CreateTagsRequest createTagsRequest){
         List<TagEntity> savedTags = tagService.createTags(createTagsRequest.getNames());
-        List<TagResponse> listOfTags = savedTags.stream()
-                .map(tagMapper::toTagResponse)
+        List<TagDto> listOfTags = savedTags.stream()
+                .map(tagMapper::toTagDto)
                 .toList();
         return ResponseEntity.status(HttpStatus.CREATED).body(listOfTags);
     }
