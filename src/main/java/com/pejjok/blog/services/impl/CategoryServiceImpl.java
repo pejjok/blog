@@ -3,6 +3,7 @@ package com.pejjok.blog.services.impl;
 import com.pejjok.blog.domain.entities.CategoryEntity;
 import com.pejjok.blog.repositories.CategoryRepository;
 import com.pejjok.blog.services.CategoryService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,5 +48,11 @@ public class CategoryServiceImpl implements CategoryService {
             }
             categoryRepository.deleteById(id);
         }
+    }
+
+    @Override
+    public CategoryEntity getCategoryById(UUID id) {
+        return categoryRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Category not found with id " + id));
     }
 }
