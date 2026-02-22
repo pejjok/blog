@@ -4,6 +4,7 @@ import com.pejjok.blog.domain.PostStatus;
 import com.pejjok.blog.domain.entities.CategoryEntity;
 import com.pejjok.blog.domain.entities.PostEntity;
 import com.pejjok.blog.domain.entities.TagEntity;
+import com.pejjok.blog.domain.entities.UserEntity;
 import com.pejjok.blog.repositories.PostRepository;
 import com.pejjok.blog.services.CategoryService;
 import com.pejjok.blog.services.PostService;
@@ -57,5 +58,10 @@ public class PostServiceImpl implements PostService {
 
         return postRepository.findAllByStatus(PostStatus.PUBLISHED);
 
+    }
+
+    @Override
+    public List<PostEntity> listOfDraftedPosts(UserEntity user) {
+        return postRepository.findAllByAuthorAndStatus(user,PostStatus.DRAFT);
     }
 }

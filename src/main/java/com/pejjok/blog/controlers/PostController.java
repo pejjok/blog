@@ -2,13 +2,12 @@ package com.pejjok.blog.controlers;
 
 import com.pejjok.blog.domain.dtos.PostDto;
 import com.pejjok.blog.domain.entities.PostEntity;
+import com.pejjok.blog.domain.entities.UserEntity;
 import com.pejjok.blog.mappers.PostMapper;
 import com.pejjok.blog.services.PostService;
+import com.pejjok.blog.services.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,20 +17,32 @@ import java.util.UUID;
 public class PostController {
 
     private final PostService postService;
+    private final UserService userService;
     private final PostMapper postMapper;
 
-    public PostController(PostService postService, PostMapper postMapper) {
+    public PostController(PostService postService, UserService userService, PostMapper postMapper) {
         this.postService = postService;
+        this.userService = userService;
         this.postMapper = postMapper;
     }
 
 
     @GetMapping
-    public ResponseEntity<List<PostDto>> getAllPosts(
+    public ResponseEntity<List<PostDto>> getAllPublishedPosts(
             @RequestParam(required = false) UUID categoryId,
             @RequestParam(required = false) UUID tagId){
         List<PostEntity> postEntities = postService.listOfPublishedPosts(categoryId,tagId);
         List<PostDto> postDtos = postEntities.stream().map(postMapper::toDto).toList();
+        return ResponseEntity.ok(postDtos);
+    }
+
+    @GetMapping("/drafts")
+    public ResponseEntity<List<PostDto>> getAllDraftedPosts(
+            @RequestAttribute UUID userId
+    ){
+        UserEntity loggedInUser = userService.getUserById(userId);
+        List<PostEntity> draftedPost = postService.listOfDraftedPosts(loggedInUser);
+        List<PostDto> postDtos = draftedPost.stream().map(postMapper::toDto).toList();
         return ResponseEntity.ok(postDtos);
     }
 }
