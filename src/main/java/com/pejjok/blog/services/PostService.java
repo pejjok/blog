@@ -14,4 +14,5 @@ public interface PostService {
     List<PostEntity> listOfDraftedPosts(UserEntity user);
     PostEntity createPost(UserEntity user, CreatePostRequest createPostRequestDto);
     PostEntity updatePost(UUID postId, @Valid UpdatePostRequest updatePostRequest);
+    PostEntity getPostById(UUID id);
 }

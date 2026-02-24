@@ -40,6 +40,13 @@ public class PostController {
         return ResponseEntity.ok(postDtos);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<PostDto> getPostById(@PathVariable UUID id){
+        PostEntity postEntity = postService.getPostById(id);
+        PostDto postDto = postMapper.toDto(postEntity);
+        return ResponseEntity.ok(postDto);
+    }
+
     @GetMapping("/drafts")
     public ResponseEntity<List<PostDto>> getAllDraftedPosts(
             @RequestAttribute UUID userId
