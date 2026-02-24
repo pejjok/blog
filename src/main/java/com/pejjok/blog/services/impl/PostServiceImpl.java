@@ -2,6 +2,7 @@ package com.pejjok.blog.services.impl;
 
 import com.pejjok.blog.domain.dtos.CreatePostRequest;
 import com.pejjok.blog.domain.PostStatus;
+import com.pejjok.blog.domain.dtos.UpdatePostRequest;
 import com.pejjok.blog.domain.entities.CategoryEntity;
 import com.pejjok.blog.domain.entities.PostEntity;
 import com.pejjok.blog.domain.entities.TagEntity;
@@ -10,6 +11,7 @@ import com.pejjok.blog.repositories.PostRepository;
 import com.pejjok.blog.services.CategoryService;
 import com.pejjok.blog.services.PostService;
 import com.pejjok.blog.services.TagService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -96,5 +99,32 @@ public class PostServiceImpl implements PostService {
         int wordCount = content.split("\\s+").length;
         return (int) Math.ceil(wordCount / WORD_PER_MINUTE);
 
+    }
+
+    @Override
+    @Transactional
+    public PostEntity updatePost(UUID postId, UpdatePostRequest updatePostRequest) {
+        PostEntity existingPost = postRepository.findById(postId)
+                .orElseThrow(()->new EntityNotFoundException("Category not found with id " + postId));
+
+        existingPost.setTitle(updatePostRequest.getTitle());
+        existingPost.setContent(updatePostRequest.getContent());
+        existingPost.setStatus(updatePostRequest.getStatus());
+        existingPost.setReadingTime(calculateReadingTime(updatePostRequest.getContent()));
+
+        UUID updatePostRequestCategoryId = updatePostRequest.getCategoryId();
+        if(!existingPost.getCategory().getId().equals(updatePostRequestCategoryId)){
+            CategoryEntity category = categoryService.getCategoryById(updatePostRequestCategoryId);
+            existingPost.setCategory(category);
+        }
+
+        Set<UUID> existingTagIds = existingPost.getTags().stream().map(TagEntity::getId).collect(Collectors.toSet());
+        Set<UUID> updatePostRequestTagIds = updatePostRequest.getTagIds();
+        if(!existingTagIds.equals(updatePostRequestTagIds)){
+            Set<TagEntity> tags = new HashSet<>(tagService.getTagByIds(updatePostRequestTagIds));
+            existingPost.setTags(tags);
+        }
+
+        return postRepository.save(existingPost);
     }
 }

@@ -2,6 +2,7 @@ package com.pejjok.blog.controlers;
 
 import com.pejjok.blog.domain.dtos.CreatePostRequest;
 import com.pejjok.blog.domain.dtos.PostDto;
+import com.pejjok.blog.domain.dtos.UpdatePostRequest;
 import com.pejjok.blog.domain.entities.PostEntity;
 import com.pejjok.blog.domain.entities.UserEntity;
 import com.pejjok.blog.mappers.PostMapper;
@@ -58,5 +59,15 @@ public class PostController {
         PostEntity newPost = postService.createPost(loggedInUser, createPostRequest);
         PostDto newPostDto = postMapper.toDto(newPost);
         return ResponseEntity.status(HttpStatus.CREATED).body(newPostDto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PostDto> updatePost(
+            @PathVariable UUID id,
+            @RequestBody @Valid UpdatePostRequest updatePostRequest
+    ){
+        PostEntity newPost = postService.updatePost(id, updatePostRequest);
+        PostDto newPostDto = postMapper.toDto(newPost);
+        return ResponseEntity.ok(newPostDto);
     }
 }
