@@ -33,7 +33,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    private Long jwtExpiryMs = 8640000L;// 24 hours
+    private Long jwtExpiryMs = 86400000L;// 24 hours
 
     @Override
     public UserDetails authenticate(String email, String password) {
