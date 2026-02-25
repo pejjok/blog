@@ -15,4 +15,5 @@ public interface PostService {
     PostEntity createPost(UserEntity user, CreatePostRequest createPostRequestDto);
     PostEntity updatePost(UUID postId, @Valid UpdatePostRequest updatePostRequest);
     PostEntity getPostById(UUID id);
+    void deletePost(UUID id);
 }
