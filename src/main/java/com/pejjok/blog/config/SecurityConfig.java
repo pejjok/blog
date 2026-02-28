@@ -1,10 +1,9 @@
 package com.pejjok.blog.config;
 
-import com.pejjok.blog.domain.entities.UserEntity;
-import com.pejjok.blog.repositories.UserRepository;
-import com.pejjok.blog.security.BlogUserDetailsServices;
+import com.pejjok.blog.security.BlogUserDetailsService;
 import com.pejjok.blog.security.JwtAuthenticationFilter;
 import com.pejjok.blog.services.AuthenticationService;
+import com.pejjok.blog.services.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,22 +26,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepository){
-        BlogUserDetailsServices blogUserDetailsServices =  new BlogUserDetailsServices(userRepository);
-
-        // Create test user, before sign up are implementing
-        String email = "user@test.com";
-        userRepository.findByEmail(email).orElseGet(()->{
-            UserEntity newUser = UserEntity.builder()
-                    .name("Test user")
-                    .email(email)
-                    .password("{noop}password")
-                    .build();
-            return userRepository.save(newUser);
-        });
-
-
-        return blogUserDetailsServices;
+    public UserDetailsService userDetailsService(UserService userService){
+        return new BlogUserDetailsService(userService);
     }
 
     @Bean

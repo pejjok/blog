@@ -8,4 +8,6 @@ import java.util.UUID;
 public interface UserService {
     UserEntity getUserById(UUID userId);
     UserEntity createUser(UserEntity user);
+    UserEntity getUserByEmail(String email);
+    boolean existsByEmail(String email);
 }
