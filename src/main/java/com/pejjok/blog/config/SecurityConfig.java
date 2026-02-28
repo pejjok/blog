@@ -1,5 +1,6 @@
 package com.pejjok.blog.config;
 
+import com.pejjok.blog.domain.UserRole;
 import com.pejjok.blog.security.BlogUserDetailsService;
 import com.pejjok.blog.security.JwtAuthenticationFilter;
 import com.pejjok.blog.services.AuthenticationService;
@@ -43,7 +44,7 @@ public class SecurityConfig {
                                         "/api/v1/tags/**"
                         ).permitAll()
                         .requestMatchers("/api/v1/posts/**", "/api/v1/categories/**", "/api/v1/tags/**")
-                        .hasRole("EDITOR")// POST, PUT, DELETE
+                        .hasRole(UserRole.EDITOR.withoutPrefix())// POST, PUT, DELETE
                         .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable())

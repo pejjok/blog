@@ -1,5 +1,6 @@
 package com.pejjok.blog.services.impl;
 
+import com.pejjok.blog.domain.UserRole;
 import com.pejjok.blog.domain.entities.UserEntity;
 import com.pejjok.blog.repositories.RoleReposiory;
 import com.pejjok.blog.repositories.UserRepository;
@@ -38,7 +39,7 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("User already exist with email " + email);
         }
         if(user.getRole()==null){
-            user.setRole(roleReposiory.findByName("ROLE_USER"));
+            user.setRole(roleReposiory.findByName(UserRole.USER.getRole()));
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);

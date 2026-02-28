@@ -1,5 +1,6 @@
 package com.pejjok.blog.config;
 
+import com.pejjok.blog.domain.UserRole;
 import com.pejjok.blog.domain.entities.RoleEntity;
 import com.pejjok.blog.domain.entities.UserEntity;
 import com.pejjok.blog.repositories.RoleReposiory;
@@ -33,16 +34,16 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void rolesInit(){
-        if(!roleReposiory.existsByName("ROLE_ADMIN")){
+        if(!roleReposiory.existsByName(UserRole.ADMIN.getRole())){
             RoleEntity role_admin = RoleEntity.builder().name("ROLE_ADMIN").build();
             roleReposiory.save(role_admin);
         }
-        if(!roleReposiory.existsByName("ROLE_EDITOR")){
-            RoleEntity role_editor = RoleEntity.builder().name("ROLE_EDITOR").build();
+        if(!roleReposiory.existsByName(UserRole.EDITOR.getRole())){
+            RoleEntity role_editor = RoleEntity.builder().name(UserRole.EDITOR.getRole()).build();
             roleReposiory.save(role_editor);
         }
-        if(!roleReposiory.existsByName("ROLE_USER")){
-            RoleEntity role_user = RoleEntity.builder().name("ROLE_USER").build();
+        if(!roleReposiory.existsByName(UserRole.USER.getRole())){
+            RoleEntity role_user = RoleEntity.builder().name(UserRole.USER.getRole()).build();
             roleReposiory.save(role_user);
         }
     }
@@ -56,7 +57,7 @@ public class DataInitializer implements CommandLineRunner {
                 .name(name)
                 .email(email)
                 .password(password)
-                .role(roleReposiory.findByName("ROLE_ADMIN"))
+                .role(roleReposiory.findByName(UserRole.ADMIN.getRole()))
                 .build();
         userService.createUser(admin);
 
