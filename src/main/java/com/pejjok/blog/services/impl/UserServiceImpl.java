@@ -1,6 +1,7 @@
 package com.pejjok.blog.services.impl;
 
 import com.pejjok.blog.domain.entities.UserEntity;
+import com.pejjok.blog.repositories.RoleReposiory;
 import com.pejjok.blog.repositories.UserRepository;
 import com.pejjok.blog.services.UserService;
 import jakarta.persistence.EntityNotFoundException;
@@ -14,10 +15,12 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final RoleReposiory roleReposiory;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleReposiory roleReposiory, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.roleReposiory = roleReposiory;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -33,6 +36,9 @@ public class UserServiceImpl implements UserService {
         String email = user.getEmail();
         if(userRepository.existsByEmail(email)){
             throw new IllegalArgumentException("User already exist with email " + email);
+        }
+        if(user.getRole()==null){
+            user.setRole(roleReposiory.findByName("ROLE_USER"));
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);

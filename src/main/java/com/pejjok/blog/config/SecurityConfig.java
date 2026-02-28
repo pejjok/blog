@@ -7,6 +7,8 @@ import com.pejjok.blog.services.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,10 +37,13 @@ public class SecurityConfig {
         http.
                 authorizeHttpRequests(auth->auth
                         .requestMatchers(HttpMethod.POST,"/api/v1/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/v1/posts/drafts").authenticated()
-                        .requestMatchers(HttpMethod.GET,"/api/v1/posts/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/v1/categories/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/v1/tags/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                        "/api/v1/posts/**",
+                                        "/api/v1/categories/**",
+                                        "/api/v1/tags/**"
+                        ).permitAll()
+                        .requestMatchers("/api/v1/posts/**", "/api/v1/categories/**", "/api/v1/tags/**")
+                        .hasRole("EDITOR")// POST, PUT, DELETE
                         .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable())
@@ -58,4 +63,10 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config){
         return config.getAuthenticationManager();
     }
+
+   @Bean
+   public RoleHierarchy roleHierarchy(){
+        String hierarchy = "ROLE_ADMIN > ROLE_EDITOR\nROLE_EDITOR > ROLE_USER";
+        return RoleHierarchyImpl.fromHierarchy(hierarchy);
+   }
 }
