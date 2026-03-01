@@ -13,12 +13,13 @@ import com.pejjok.blog.services.CategoryService;
 import com.pejjok.blog.services.PostService;
 import com.pejjok.blog.services.TagService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -38,14 +39,15 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PostEntity> listOfPublishedPosts(UUID categoryId, UUID tagId) {
+    public Page<PostEntity> listOfPublishedPosts(UUID categoryId, UUID tagId, Pageable pageable) {
         if(categoryId != null && tagId != null){
             CategoryEntity category = categoryService.getCategoryById(categoryId);
             TagEntity tag = tagService.getTagById(tagId);
             return postRepository.findAllByStatusAndCategoryAndTagsContaining(
                     PostStatus.PUBLISHED,
                     category,
-                    tag
+                    tag,
+                    pageable
             );
         }
 
@@ -53,7 +55,8 @@ public class PostServiceImpl implements PostService {
             CategoryEntity category = categoryService.getCategoryById(categoryId);
             return postRepository.findAllByStatusAndCategory(
                     PostStatus.PUBLISHED,
-                    category
+                    category,
+                    pageable
             );
         }
 
@@ -61,20 +64,21 @@ public class PostServiceImpl implements PostService {
             TagEntity tag = tagService.getTagById(tagId);
             return postRepository.findAllByStatusAndTagsContaining(
                     PostStatus.PUBLISHED,
-                    tag
+                    tag,
+                    pageable
             );
         }
 
-        return postRepository.findAllByStatus(PostStatus.PUBLISHED);
+        return postRepository.findAllByStatus(PostStatus.PUBLISHED, pageable);
 
     }
 
     @Override
-    public List<PostEntity> listOfDraftedPosts(UserEntity user) {
+    public Page<PostEntity> listOfDraftedPosts(UserEntity user, Pageable pageable) {
         if(user.getRole().getName().equals(UserRole.ADMIN.getRole())){ // Admin can see all drafts
-            return postRepository.findAllByStatus(PostStatus.DRAFT);
+            return postRepository.findAllByStatus(PostStatus.DRAFT, pageable);
         }
-        return postRepository.findAllByAuthorAndStatus(user,PostStatus.DRAFT); // If user editor than only his drafts can be seen
+        return postRepository.findAllByAuthorAndStatus(user,PostStatus.DRAFT, pageable); // If user editor than only his drafts can be seen
     }
 
     @Override

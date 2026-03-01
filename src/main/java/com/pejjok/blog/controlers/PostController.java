@@ -10,6 +10,10 @@ import com.pejjok.blog.security.BlogUserDetails;
 import com.pejjok.blog.services.PostService;
 import com.pejjok.blog.services.UserService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,11 +38,12 @@ public class PostController {
 
 
     @GetMapping
-    public ResponseEntity<List<PostDto>> getAllPublishedPosts(
+    public ResponseEntity<Page<PostDto>> getAllPublishedPosts(
             @RequestParam(required = false) UUID categoryId,
-            @RequestParam(required = false) UUID tagId){
-        List<PostEntity> postEntities = postService.listOfPublishedPosts(categoryId,tagId);
-        List<PostDto> postDtos = postEntities.stream().map(postMapper::toDto).toList();
+            @RequestParam(required = false) UUID tagId,
+            @PageableDefault(page = 0, size = 20, sort = "createdAt" , direction = Sort.Direction.DESC) Pageable pageable){
+        Page<PostEntity> postEntities = postService.listOfPublishedPosts(categoryId,tagId,pageable);
+        Page<PostDto> postDtos = postEntities.map(postMapper::toDto);
         return ResponseEntity.ok(postDtos);
     }
 
@@ -50,12 +55,13 @@ public class PostController {
     }
 
     @GetMapping("/drafts")
-    public ResponseEntity<List<PostDto>> getAllDraftedPosts(
-            @AuthenticationPrincipal BlogUserDetails userDetails
+    public ResponseEntity<Page<PostDto>> getAllDraftedPosts(
+            @AuthenticationPrincipal BlogUserDetails userDetails,
+            @PageableDefault(page = 0, size = 20, sort = "createdAt" , direction = Sort.Direction.DESC) Pageable pageable
             ){
         UserEntity loggedInUser = userDetails.getUser();
-        List<PostEntity> draftedPost = postService.listOfDraftedPosts(loggedInUser);
-        List<PostDto> postDtos = draftedPost.stream().map(postMapper::toDto).toList();
+        Page<PostEntity> draftedPost = postService.listOfDraftedPosts(loggedInUser, pageable);
+        Page<PostDto> postDtos = draftedPost.map(postMapper::toDto);
         return ResponseEntity.ok(postDtos);
     }
 

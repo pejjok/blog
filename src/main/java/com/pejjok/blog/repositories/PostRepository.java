@@ -5,6 +5,8 @@ import com.pejjok.blog.domain.entities.CategoryEntity;
 import com.pejjok.blog.domain.entities.PostEntity;
 import com.pejjok.blog.domain.entities.TagEntity;
 import com.pejjok.blog.domain.entities.UserEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,9 +15,9 @@ import java.util.UUID;
 
 @Repository
 public interface PostRepository extends JpaRepository<PostEntity, UUID> {
-    List<PostEntity> findAllByStatusAndCategoryAndTagsContaining(PostStatus status, CategoryEntity category, TagEntity tag);
-    List<PostEntity> findAllByStatusAndCategory(PostStatus status, CategoryEntity category);
-    List<PostEntity> findAllByStatusAndTagsContaining(PostStatus status, TagEntity tag);
-    List<PostEntity> findAllByStatus(PostStatus status);
-    List<PostEntity> findAllByAuthorAndStatus(UserEntity author,PostStatus status);
+    Page<PostEntity> findAllByStatusAndCategoryAndTagsContaining(PostStatus status, CategoryEntity category, TagEntity tag, Pageable pageable);
+    Page<PostEntity> findAllByStatusAndCategory(PostStatus status, CategoryEntity category, Pageable pageable);
+    Page<PostEntity> findAllByStatusAndTagsContaining(PostStatus status, TagEntity tag, Pageable pageable);
+    Page<PostEntity> findAllByStatus(PostStatus status, Pageable pageable);
+    Page<PostEntity> findAllByAuthorAndStatus(UserEntity author,PostStatus status, Pageable pageable);
 }
