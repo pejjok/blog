@@ -51,7 +51,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Page<CommentEntity> getComments(UUID postId, Pageable pageable) {
-        return commentRepository.findAll(pageable);
+        PostEntity post = postService.getPostById(postId);
+        return commentRepository.findAllByPost(post, pageable);
     }
 
     @Override
