@@ -6,11 +6,13 @@ import com.pejjok.blog.domain.dtos.UpdatePostRequest;
 import com.pejjok.blog.domain.entities.PostEntity;
 import com.pejjok.blog.domain.entities.UserEntity;
 import com.pejjok.blog.mappers.PostMapper;
+import com.pejjok.blog.security.BlogUserDetails;
 import com.pejjok.blog.services.PostService;
 import com.pejjok.blog.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,9 +51,9 @@ public class PostController {
 
     @GetMapping("/drafts")
     public ResponseEntity<List<PostDto>> getAllDraftedPosts(
-            @RequestAttribute UUID userId
-    ){
-        UserEntity loggedInUser = userService.getUserById(userId);
+            @AuthenticationPrincipal BlogUserDetails userDetails
+            ){
+        UserEntity loggedInUser = userDetails.getUser();
         List<PostEntity> draftedPost = postService.listOfDraftedPosts(loggedInUser);
         List<PostDto> postDtos = draftedPost.stream().map(postMapper::toDto).toList();
         return ResponseEntity.ok(postDtos);
@@ -60,9 +62,9 @@ public class PostController {
     @PostMapping
     public ResponseEntity<PostDto> createPost(
             @RequestBody @Valid CreatePostRequest createPostRequest,
-            @RequestAttribute UUID userId
+            @AuthenticationPrincipal BlogUserDetails userDetails
     ){
-        UserEntity loggedInUser = userService.getUserById(userId);
+        UserEntity loggedInUser = userDetails.getUser();
         PostEntity newPost = postService.createPost(loggedInUser, createPostRequest);
         PostDto newPostDto = postMapper.toDto(newPost);
         return ResponseEntity.status(HttpStatus.CREATED).body(newPostDto);

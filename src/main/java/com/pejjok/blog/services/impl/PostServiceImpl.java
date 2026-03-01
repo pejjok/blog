@@ -1,5 +1,6 @@
 package com.pejjok.blog.services.impl;
 
+import com.pejjok.blog.domain.UserRole;
 import com.pejjok.blog.domain.dtos.CreatePostRequest;
 import com.pejjok.blog.domain.PostStatus;
 import com.pejjok.blog.domain.dtos.UpdatePostRequest;
@@ -69,7 +70,10 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostEntity> listOfDraftedPosts(UserEntity user) {
-        return postRepository.findAllByAuthorAndStatus(user,PostStatus.DRAFT);
+        if(user.getRole().getName().equals(UserRole.ADMIN.getRole())){ // Admin can see all drafts
+            return postRepository.findAllByStatus(PostStatus.DRAFT);
+        }
+        return postRepository.findAllByAuthorAndStatus(user,PostStatus.DRAFT); // If user editor than only his drafts can be seen
     }
 
     @Override
