@@ -8,6 +8,10 @@ import com.pejjok.blog.mappers.CommentMapper;
 import com.pejjok.blog.security.BlogUserDetails;
 import com.pejjok.blog.services.CommentService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -37,5 +41,15 @@ public class CommentController {
         CommentEntity newComment = commentService.createComment(loggedInUser, postId, createCommentRequest);
         CommentDto newCommentDto = commentMapper.toDto(newComment);
         return ResponseEntity.status(HttpStatus.CREATED).body(newCommentDto);
+    }
+
+    @GetMapping("posts/{postId}/comments")
+    public ResponseEntity<Page<CommentDto>> getComments(
+            @PathVariable UUID postId,
+            @PageableDefault(page = 0, size = 10, sort = "createdAt" , direction = Sort.Direction.DESC) Pageable pageable
+    ){
+        Page<CommentEntity> comments = commentService.getComments(postId, pageable);
+        Page<CommentDto> commentsDto = comments.map(commentMapper::toDto);
+        return ResponseEntity.ok(commentsDto);
     }
 }

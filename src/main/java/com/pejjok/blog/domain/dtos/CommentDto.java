@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -15,4 +16,6 @@ public class CommentDto {
     private UUID id;
     private UserShortDto author;
     private String content;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

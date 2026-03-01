@@ -9,6 +9,8 @@ import com.pejjok.blog.repositories.CommentRepository;
 import com.pejjok.blog.services.CommentService;
 import com.pejjok.blog.services.PostService;
 import com.pejjok.blog.services.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,5 +44,10 @@ public class CommentServiceImpl implements CommentService {
                 .build();
 
         return commentRepository.save(newComment);
+    }
+
+    @Override
+    public Page<CommentEntity> getComments(UUID postId, Pageable pageable) {
+        return commentRepository.findAll(pageable);
     }
 }
