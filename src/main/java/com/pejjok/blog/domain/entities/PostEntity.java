@@ -3,6 +3,8 @@ package com.pejjok.blog.domain.entities;
 import com.pejjok.blog.domain.PostStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -51,10 +53,10 @@ public class PostEntity {
     )
     private Set<TagEntity> tags;
 
-    @Column(nullable = false, columnDefinition = "timestamp(9)")// timestamp(9) is same precision for LocalDateTime
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false, columnDefinition = "timestamp(9)")// timestamp(9) is same precision for LocalDateTime
+    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
     @Override

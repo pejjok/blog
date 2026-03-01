@@ -2,6 +2,7 @@ package com.pejjok.blog.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class UserEntity {
     @OneToMany(mappedBy = "author",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<PostEntity> posts = new ArrayList<>();
 
-    @Column(nullable = false, columnDefinition = "timestamp(9)") // timestamp(9) is same precision for LocalDateTime
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     @Override
