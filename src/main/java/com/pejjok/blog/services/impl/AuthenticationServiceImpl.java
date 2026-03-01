@@ -46,6 +46,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public String generateToken(UserDetails userDetails) {
         Map<String,Object> claims = new HashMap<>();
+        claims.put("role",userDetails.getAuthorities());
         return Jwts.builder()
                 .claims(claims)
                 .subject(userDetails.getUsername())
