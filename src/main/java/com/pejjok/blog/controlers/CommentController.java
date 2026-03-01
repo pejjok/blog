@@ -2,6 +2,7 @@ package com.pejjok.blog.controlers;
 
 import com.pejjok.blog.domain.dtos.CommentDto;
 import com.pejjok.blog.domain.dtos.CreateCommentRequest;
+import com.pejjok.blog.domain.dtos.UpdateCommentRequest;
 import com.pejjok.blog.domain.entities.CommentEntity;
 import com.pejjok.blog.domain.entities.UserEntity;
 import com.pejjok.blog.mappers.CommentMapper;
@@ -51,5 +52,17 @@ public class CommentController {
         Page<CommentEntity> comments = commentService.getComments(postId, pageable);
         Page<CommentDto> commentsDto = comments.map(commentMapper::toDto);
         return ResponseEntity.ok(commentsDto);
+    }
+
+    @PutMapping("comments/{id}")
+    public ResponseEntity<CommentDto> updateComment(
+            @AuthenticationPrincipal BlogUserDetails userDetails,
+            @PathVariable UUID id,
+            @RequestBody @Valid UpdateCommentRequest updateCommentRequest
+    ){
+        UserEntity loggedInUser = userDetails.getUser();
+        CommentEntity updatedComment = commentService.updateComment(loggedInUser, id, updateCommentRequest);
+        CommentDto updatedCommentDto = commentMapper.toDto(updatedComment);
+        return ResponseEntity.ok(updatedCommentDto);
     }
 }
