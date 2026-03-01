@@ -1,5 +1,6 @@
 package com.pejjok.blog.services.impl;
 
+import com.pejjok.blog.domain.PostStatus;
 import com.pejjok.blog.domain.dtos.CreateCommentRequest;
 import com.pejjok.blog.domain.entities.CommentEntity;
 import com.pejjok.blog.domain.entities.PostEntity;
@@ -31,7 +32,9 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     public CommentEntity createComment(UserEntity user, UUID postId, CreateCommentRequest createCommentRequest) {
         PostEntity post = postService.getPostById(postId);
-
+        if (post.getStatus().equals(PostStatus.DRAFT)){
+            throw new IllegalStateException("You can't comment on a draft post");
+        }
         CommentEntity newComment = CommentEntity.builder()
                 .content(createCommentRequest.getContent())
                 .post(post)
