@@ -3,8 +3,6 @@ package com.pejjok.blog.domain.entities;
 import com.pejjok.blog.domain.PostStatus;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -52,6 +50,10 @@ public class PostEntity {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private Set<TagEntity> tags;
+
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<CommentEntity> comments;
+
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
