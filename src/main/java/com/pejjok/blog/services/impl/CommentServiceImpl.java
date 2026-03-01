@@ -18,6 +18,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -54,6 +55,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public CommentEntity updateComment(UserEntity user, UUID id, UpdateCommentRequest updateCommentRequest) {
         CommentEntity existingComment = commentRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("Comment not found with id " + id)
@@ -66,5 +68,17 @@ public class CommentServiceImpl implements CommentService {
         existingComment.setContent(updateCommentRequest.getContent());
 
         return commentRepository.save(existingComment);
+    }
+
+    @Override
+    public void deleteComment(UserEntity user, UUID id) {
+        Optional<CommentEntity> existingComment = commentRepository.findById(id);
+        if(existingComment.isEmpty()){
+            return;
+        }
+        if(!existingComment.get().getAuthor().getId().equals(user.getId()) && !user.getRole().getName().equals(UserRole.ADMIN.getRole())){
+            throw new AccessDeniedException("You are not allowed to delete this post");
+        }
+        commentRepository.deleteById(id);
     }
 }

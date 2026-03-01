@@ -65,4 +65,14 @@ public class CommentController {
         CommentDto updatedCommentDto = commentMapper.toDto(updatedComment);
         return ResponseEntity.ok(updatedCommentDto);
     }
+
+    @DeleteMapping("comments/{id}")
+    public ResponseEntity<Void> deleteComment(
+            @AuthenticationPrincipal BlogUserDetails userDetails,
+            @PathVariable UUID id
+    ){
+        UserEntity loggedInUser = userDetails.getUser();
+        commentService.deleteComment(loggedInUser, id);
+        return ResponseEntity.noContent().build();
+    }
 }
