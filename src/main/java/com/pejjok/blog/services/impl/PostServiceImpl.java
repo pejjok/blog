@@ -13,6 +13,7 @@ import com.pejjok.blog.services.CategoryService;
 import com.pejjok.blog.services.PostService;
 import com.pejjok.blog.services.TagService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -107,10 +108,12 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public PostEntity updatePost(UUID postId, UpdatePostRequest updatePostRequest) {
+    public PostEntity updatePost(UserEntity user, UUID postId, UpdatePostRequest updatePostRequest) {
         PostEntity existingPost = postRepository.findById(postId)
-                .orElseThrow(()->new EntityNotFoundException("Category not found with id " + postId));
-
+                .orElseThrow(()->new EntityNotFoundException("Post not found with id " + postId));
+        if(!existingPost.getAuthor().getId().equals(user.getId()) && !user.getRole().getName().equals(UserRole.ADMIN.getRole())){
+            throw new AccessDeniedException("You are not allowed to update this post");
+        }
         existingPost.setTitle(updatePostRequest.getTitle());
         existingPost.setContent(updatePostRequest.getContent());
         existingPost.setStatus(updatePostRequest.getStatus());

@@ -73,9 +73,11 @@ public class PostController {
     @PutMapping("/{id}")
     public ResponseEntity<PostDto> updatePost(
             @PathVariable UUID id,
-            @RequestBody @Valid UpdatePostRequest updatePostRequest
+            @RequestBody @Valid UpdatePostRequest updatePostRequest,
+            @AuthenticationPrincipal BlogUserDetails userDetails
     ){
-        PostEntity newPost = postService.updatePost(id, updatePostRequest);
+        UserEntity loggedInUser = userDetails.getUser();
+        PostEntity newPost = postService.updatePost(loggedInUser, id, updatePostRequest);
         PostDto newPostDto = postMapper.toDto(newPost);
         return ResponseEntity.ok(newPostDto);
     }
