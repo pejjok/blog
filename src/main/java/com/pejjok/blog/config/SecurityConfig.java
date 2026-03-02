@@ -43,6 +43,7 @@ public class SecurityConfig {
                                         "/api/v1/categories/**",
                                         "/api/v1/tags/**"
                         ).permitAll()
+                        .requestMatchers("/api/v1/posts/*/comments").hasRole(UserRole.USER.withoutPrefix()) // POST, PUT, DELETE
                         .requestMatchers("/api/v1/posts/**", "/api/v1/categories/**", "/api/v1/tags/**")
                         .hasRole(UserRole.EDITOR.withoutPrefix())// POST, PUT, DELETE
                         .anyRequest().authenticated()
