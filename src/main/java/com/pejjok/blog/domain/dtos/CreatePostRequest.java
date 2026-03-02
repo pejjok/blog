@@ -9,9 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Data
 @AllArgsConstructor
@@ -35,4 +33,7 @@ public class CreatePostRequest {
 
     @NotNull(message = "Status is required")
     private PostStatus status;
+
+    @Builder.Default
+    private List<@NotNull(message = "Image ID can not be null") UUID> imageIds = new ArrayList<>();
 }

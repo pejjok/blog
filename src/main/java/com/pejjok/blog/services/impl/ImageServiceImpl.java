@@ -4,10 +4,12 @@ import com.pejjok.blog.domain.entities.ImageEntity;
 import com.pejjok.blog.repositories.ImageRepository;
 import com.pejjok.blog.services.ImageService;
 import com.pejjok.blog.services.StorageService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,5 +38,14 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Optional<Resource> loadAsResource(String filename) {
         return storageService.loadAsResource(filename);
+    }
+
+    @Override
+    public List<ImageEntity> getImageByIds(List<UUID> ids) {
+        List<ImageEntity> images = imageRepository.findAllById(ids);
+        if (images.size() != ids.size()){
+            throw new EntityNotFoundException("Not all specified images are existing");
+        }
+        return images;
     }
 }
