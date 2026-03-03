@@ -29,6 +29,7 @@ public class PostController {
     private final PostService postService;
     private final UserService userService;
     private final PostMapper postMapper;
+    private final int MAX_CONTENT_LENGTH = 150;
 
     public PostController(PostService postService, UserService userService, PostMapper postMapper) {
         this.postService = postService;
@@ -43,7 +44,7 @@ public class PostController {
             @RequestParam(required = false) UUID tagId,
             @PageableDefault(page = 0, size = 20, sort = "createdAt" , direction = Sort.Direction.DESC) Pageable pageable){
         Page<PostEntity> postEntities = postService.listOfPublishedPosts(categoryId,tagId,pageable);
-        Page<PostDto> postDtos = postEntities.map(postMapper::toDto);
+        Page<PostDto> postDtos = postEntities.map(post -> postMapper.toDtoWithShortContent(post,MAX_CONTENT_LENGTH));
         return ResponseEntity.ok(postDtos);
     }
 
@@ -61,7 +62,7 @@ public class PostController {
             ){
         UserEntity loggedInUser = userDetails.getUser();
         Page<PostEntity> draftedPost = postService.listOfDraftedPosts(loggedInUser, pageable);
-        Page<PostDto> postDtos = draftedPost.map(postMapper::toDto);
+        Page<PostDto> postDtos = draftedPost.map(post -> postMapper.toDtoWithShortContent(post,MAX_CONTENT_LENGTH));
         return ResponseEntity.ok(postDtos);
     }
 
