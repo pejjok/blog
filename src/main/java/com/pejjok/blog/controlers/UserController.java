@@ -34,6 +34,15 @@ public class UserController {
         return ResponseEntity.ok(usersDto);
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<UserFullDto> getUser(
+            @AuthenticationPrincipal BlogUserDetails userDetails
+    ){
+        UserEntity user = userDetails.getUser();
+        UserFullDto userDto = userMapper.toDto(user);
+        return ResponseEntity.ok(userDto);
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<UserFullDto> changeRole(
             @PathVariable UUID id,
