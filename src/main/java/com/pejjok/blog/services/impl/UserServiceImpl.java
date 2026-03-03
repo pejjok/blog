@@ -73,14 +73,14 @@ public class UserServiceImpl implements UserService {
         }
 
         String role = changeRoleRequest.getRole();
-        UserEntity userById = userRepository.findById(id).orElseThrow(
+        UserEntity userToAssign = userRepository.findById(id).orElseThrow(
                 ()->new EntityNotFoundException("User not found with id " + id)
         );
         RoleEntity roleEntity = roleReposiory.findByName(role);
         if (roleEntity == null){
             throw new EntityNotFoundException("Role not found with name " + role);
         }
-        user.setRole(roleEntity);
+        userToAssign.setRole(roleEntity);
         return userRepository.save(user);
     }
 }
