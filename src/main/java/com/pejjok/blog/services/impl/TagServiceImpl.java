@@ -48,6 +48,15 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    public TagEntity createTag(TagEntity tagEntity) {
+        String tagName = tagEntity.getName();
+        if(tagRepository.existsByNameIgnoreCase(tagName)){
+            throw new IllegalArgumentException("Category already exist with name "+ tagName);
+        }
+        return tagRepository.save(tagEntity);
+    }
+
+    @Override
     @Transactional
     public void deleteTag(UUID id) {
         Optional<TagEntity> tag = tagRepository.findById(id);

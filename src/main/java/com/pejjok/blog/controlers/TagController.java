@@ -1,7 +1,8 @@
 package com.pejjok.blog.controlers;
 
-import com.pejjok.blog.domain.dtos.CreateTagsRequest;
+import com.pejjok.blog.domain.dtos.CreateTagRequest;
 import com.pejjok.blog.domain.dtos.TagDto;
+import com.pejjok.blog.domain.entities.CategoryEntity;
 import com.pejjok.blog.domain.entities.TagEntity;
 import com.pejjok.blog.mappers.TagMapper;
 import com.pejjok.blog.services.TagService;
@@ -28,18 +29,16 @@ public class TagController {
     @GetMapping
     public ResponseEntity<List<TagDto>> getTags(){
         List<TagDto> listOfTags = tagService.listOfTags().stream()
-                .map(tagMapper::toTagDto)
+                .map(tagMapper::toDto)
                 .toList();
         return ResponseEntity.ok(listOfTags);
     }
 
     @PostMapping
-    public ResponseEntity<List<TagDto>> createTags(@RequestBody @Valid CreateTagsRequest createTagsRequest){
-        List<TagEntity> savedTags = tagService.createTags(createTagsRequest.getNames());
-        List<TagDto> listOfTags = savedTags.stream()
-                .map(tagMapper::toTagDto)
-                .toList();
-        return ResponseEntity.status(HttpStatus.CREATED).body(listOfTags);
+    public ResponseEntity<TagDto> createTags(@RequestBody @Valid CreateTagRequest createTagRequest){
+        TagEntity tagToCreate = tagMapper.toEntity(createTagRequest);
+        TagEntity savedTag = tagService.createTag(tagToCreate);
+        return new ResponseEntity<>(tagMapper.toDto(savedTag), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
