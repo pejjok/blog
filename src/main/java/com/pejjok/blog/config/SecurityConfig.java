@@ -41,9 +41,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,
                                         "/api/v1/posts/**",
                                         "/api/v1/categories/**",
-                                        "/api/v1/tags/**"
+                                        "/api/v1/tags/**",
+                                        "/api/v1/images/**"
                         ).permitAll()
                         .requestMatchers("/api/v1/posts/*/comments").hasRole(UserRole.USER.withoutPrefix()) // POST, PUT, DELETE
+                        .requestMatchers(HttpMethod.POST, "/api/v1/images").hasRole(UserRole.EDITOR.withoutPrefix())
                         .requestMatchers("/api/v1/posts/**", "/api/v1/categories/**", "/api/v1/tags/**")
                         .hasRole(UserRole.EDITOR.withoutPrefix())// POST, PUT, DELETE
                         .anyRequest().authenticated()
