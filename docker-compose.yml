@@ -1,4 +1,18 @@
 services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
   db:
     image: postgres:latest
     ports:
@@ -6,8 +20,3 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-  adminer:
-    image: adminer:latest
-    restart: always
-    ports:
-      - 8888:8080
