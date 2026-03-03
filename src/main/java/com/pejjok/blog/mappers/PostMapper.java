@@ -15,6 +15,7 @@ public interface PostMapper {
     @Mapping(target = "category",source = "category")
     @Mapping(target = "tags",source = "tags")
     @Mapping(target = "status",source = "status")
+    @Mapping(target = "images",source = "images")
     PostDto toDto(PostEntity post);
 
     @Mapping(target = "author",source = "post.author")
