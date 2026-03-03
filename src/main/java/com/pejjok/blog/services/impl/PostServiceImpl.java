@@ -99,7 +99,7 @@ public class PostServiceImpl implements PostService {
         List<UUID> imageIds = createPostRequestDto.getImageIds();
         List<ImageEntity> images = imageService.getImageByIds(imageIds);
         images.forEach(image -> image.setPost(newPost));
-        newPost.setImages(images);
+        newPost.getImages().addAll(images);
 
 
         return postRepository.save(newPost);
@@ -144,8 +144,9 @@ public class PostServiceImpl implements PostService {
         List<UUID> updatePostRequestImageIds = updatePostRequest.getImageIds();
         if (!existingImageIds.equals(updatePostRequestImageIds)) {
             List<ImageEntity> images = imageService.getImageByIds(updatePostRequestImageIds);
+            existingPost.getImages().clear();
             images.forEach(image -> image.setPost(existingPost));
-            existingPost.setImages(images);
+            existingPost.getImages().addAll(images);
         }
 
         return postRepository.save(existingPost);

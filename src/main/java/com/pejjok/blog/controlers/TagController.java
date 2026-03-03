@@ -5,6 +5,7 @@ import com.pejjok.blog.domain.dtos.TagDto;
 import com.pejjok.blog.domain.entities.TagEntity;
 import com.pejjok.blog.mappers.TagMapper;
 import com.pejjok.blog.services.TagService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class TagController {
     }
 
     @PostMapping
-    public ResponseEntity<List<TagDto>> createTags(@RequestBody CreateTagsRequest createTagsRequest){
+    public ResponseEntity<List<TagDto>> createTags(@RequestBody @Valid CreateTagsRequest createTagsRequest){
         List<TagEntity> savedTags = tagService.createTags(createTagsRequest.getNames());
         List<TagDto> listOfTags = savedTags.stream()
                 .map(tagMapper::toTagDto)

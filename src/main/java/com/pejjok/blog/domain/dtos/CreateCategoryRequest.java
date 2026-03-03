@@ -13,6 +13,6 @@ import lombok.*;
 public class CreateCategoryRequest {
     @NotBlank(message = "Category name is required")
     @Size(min = 2,max = 50,message = "Category name must be between {min} and {max} characters")
-    @Pattern(regexp = "^[\\w\\s-]+$", message = "Category name can only conrain letters, numbers and space")
+    @Pattern(regexp = "^[\\p{L}\\p{N}\\s-]+$", message = "Category name can only conrain letters, numbers and space")
     private String name;
 }

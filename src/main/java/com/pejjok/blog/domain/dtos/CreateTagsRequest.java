@@ -19,7 +19,7 @@ public class CreateTagsRequest {
     @Size(max = 10, message = "Maximum {max} tags allowed")
     private Set<
             @Size(min = 2,max = 30,message = "Tag name must be between {min} and {max} characters")
-            @Pattern(regexp = "^[\\w\\s-]+$", message = "Tag name can only conrain letters, numbers and space")
+            @Pattern(regexp = "^[\\p{L}\\p{N}\\s-]+$",flags = Pattern.Flag.UNICODE_CASE, message = "Tag name can only conrain letters, numbers and space")
             String
             > names;
 }
