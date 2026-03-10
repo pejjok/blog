@@ -9,6 +9,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -47,5 +48,19 @@ public class ImageServiceImpl implements ImageService {
             throw new EntityNotFoundException("Not all specified images are existing");
         }
         return images;
+    }
+
+    @Override
+    public List<ImageEntity> findAllNotUsedImages() {
+        return imageRepository.findByPostNullAndCreatedAtBefore(LocalDateTime.now().minusDays(7)); // Images that not used in post and was created more than 7 days ago
+    }
+
+    @Override
+    public void delete(UUID id) {
+        Optional<ImageEntity> image = imageRepository.findById(id);
+        if (image.isPresent()){
+            storageService.delete(image.get().getFilename());
+            imageRepository.delete(image.get());
+        }
     }
 }

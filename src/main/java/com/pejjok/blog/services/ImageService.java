@@ -12,4 +12,6 @@ public interface ImageService {
     ImageEntity uploadImage(MultipartFile file);
     Optional<Resource> loadAsResource(String filename);
     List<ImageEntity> getImageByIds(List<UUID> ids);
+    List<ImageEntity> findAllNotUsedImages();
+    void delete(UUID id);
 }

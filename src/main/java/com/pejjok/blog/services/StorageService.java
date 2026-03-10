@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface StorageService {
     String store(MultipartFile file,String filename);
     Optional<Resource> loadAsResource(String filename);
+    void delete(String filename);
 }
