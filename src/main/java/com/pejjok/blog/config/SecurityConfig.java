@@ -1,6 +1,7 @@
 package com.pejjok.blog.config;
 
 import com.pejjok.blog.domain.UserRole;
+import com.pejjok.blog.repositories.UserRepository;
 import com.pejjok.blog.security.BlogUserDetailsService;
 import com.pejjok.blog.security.JwtAuthenticationFilter;
 import com.pejjok.blog.services.AuthenticationService;
@@ -29,8 +30,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(UserService userService){
-        return new BlogUserDetailsService(userService);
+    public UserDetailsService userDetailsService(UserRepository userRepository){
+        return new BlogUserDetailsService(userRepository);
     }
 
     @Bean
