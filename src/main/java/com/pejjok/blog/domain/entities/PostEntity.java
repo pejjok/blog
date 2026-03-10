@@ -40,7 +40,7 @@ public class PostEntity {
     @JoinColumn(name = "categoty_id",nullable = false)
     private CategoryEntity category;
 
-    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "post")
     private List<ImageEntity> images = new ArrayList<>();
 
     @ManyToMany
