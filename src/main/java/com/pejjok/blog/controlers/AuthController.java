@@ -30,7 +30,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> authentication(@RequestBody LoginRequest loginRequest){
+    public ResponseEntity<AuthResponse> authentication(@RequestBody @Valid LoginRequest loginRequest){
         UserDetails userDetails = authenticationService.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
         AuthResponse authResponse = AuthResponse.builder()
                 .token(authenticationService.generateToken(userDetails))
