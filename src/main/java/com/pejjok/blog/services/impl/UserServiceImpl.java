@@ -83,4 +83,9 @@ public class UserServiceImpl implements UserService {
         userToAssign.setRole(roleEntity);
         return userRepository.save(user);
     }
+
+    @Override
+    public void deleteUser(UUID id) {
+        userRepository.deleteById(id);
+    }
 }

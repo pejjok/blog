@@ -14,4 +14,5 @@ public interface UserService {
     boolean existsByEmail(String email);
     List<UserEntity> getAllUsers();
     UserEntity changeRole(UserEntity user, UUID id, ChangeRoleRequest changeRoleRequest);
+    void deleteUser(UUID id);
 }
