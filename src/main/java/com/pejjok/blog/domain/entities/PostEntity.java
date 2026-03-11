@@ -80,6 +80,22 @@ public class PostEntity {
         this.updatedAt = now;
     }
 
+    public void attachImage(ImageEntity image){
+        if (!images.contains(image)){
+            image.setPost(this);
+        }
+    }
+
+    public void detachAllImages(){
+        this.images.forEach(image -> image.setPost(null));
+    }
+
+    @PreRemove
+    protected void onDestroy(){
+        this.detachAllImages();
+    }
+
+
     @PreUpdate
     protected void onUpdate(){
         this.updatedAt = LocalDateTime.now();

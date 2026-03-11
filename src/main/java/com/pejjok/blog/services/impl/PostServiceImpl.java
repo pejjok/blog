@@ -98,7 +98,7 @@ public class PostServiceImpl implements PostService {
 
         List<UUID> imageIds = createPostRequestDto.getImageIds();
         List<ImageEntity> images = imageService.getImageByIds(imageIds);
-        images.forEach(image -> image.setPost(newPost));
+        images.forEach(newPost::attachImage);
 
 
         return postRepository.save(newPost);
@@ -144,8 +144,8 @@ public class PostServiceImpl implements PostService {
         // Detach old images and attach new one
         if (!existingImageIds.equals(updatePostRequestImageIds)) {
             List<ImageEntity> images = imageService.getImageByIds(updatePostRequestImageIds);
-            existingPost.getImages().forEach(image -> image.setPost(null));
-            images.forEach(image -> image.setPost(existingPost));
+            existingPost.detachAllImages();
+            images.forEach(existingPost::attachImage);
         }
 
         return postRepository.save(existingPost);
@@ -159,10 +159,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void deletePost(UUID id) {
-        Optional<PostEntity> post = postRepository.findById(id);
-        if (post.isPresent()){
-            post.get().getImages().forEach(image -> image.setPost(null));
-            postRepository.delete(post.get());
-        }
+        postRepository.deleteById(id);
     }
 }
