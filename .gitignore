@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 .env
 uploads/
+docker-compose.yml
 ### STS ###
 .apt_generated
 .classpath
